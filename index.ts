@@ -29,6 +29,17 @@ server.get<DetailRequest>('/detail', async (request, reply) => {
     params: {api_key: process.env.TMDB_API_KEY}
   })
   .then(res => res.data)
+  .then(tmdb_res_data => {
+    return axios.get(`https://imdb-api.com/en/API/Wikipedia/${process.env.IMDB_API_KEY}/${tmdb_res_data.imdb_id}`, {
+      headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' }, // workaround for gzip encoding bug
+    })
+    .then(imdb_api_res => {
+      return {
+        imdb_api: imdb_api_res.data,
+        ...tmdb_res_data,
+      }
+    })
+  })
 })
 
 server.listen({ port: 8080 }, (err, address) => {
@@ -38,6 +49,10 @@ server.listen({ port: 8080 }, (err, address) => {
   }
   if (process.env.TMDB_API_KEY === undefined) {
     console.error("TMDB_API_KEY (v3) environment variable missing");
+    process.exit(1);
+  }
+  if (process.env.IMDB_API_KEY === undefined) {
+    console.error("IMDB_API_KEY environment variable missing");
     process.exit(1);
   }
   console.log(`Server listening at ${address}`);
