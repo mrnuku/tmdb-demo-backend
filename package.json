@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsnd --respawn index.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "node index.js"
+    "start": "node build/index.js"
   },
   "keywords": [],
   "author": "",
