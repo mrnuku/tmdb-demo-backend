@@ -9,7 +9,7 @@ interface SearchRequest extends RequestGenericInterface {
   }
 }
 
-server.get<SearchRequest>('/search', async (request, reply) => {
+server.get<SearchRequest>('/api/search', async (request, reply) => {
   return axios.get("https://api.themoviedb.org/3/search/movie", {
     headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' }, // workaround for gzip encoding bug
     params: {api_key: process.env.TMDB_API_KEY, query: request.query.q}
@@ -23,7 +23,7 @@ interface DetailRequest extends RequestGenericInterface {
   }
 }
 
-server.get<DetailRequest>('/detail', async (request, reply) => {
+server.get<DetailRequest>('/api/detail', async (request, reply) => {
   return axios.get(`https://api.themoviedb.org/3/movie/${request.query.id}`, {
     headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' }, // workaround for gzip encoding bug
     params: {api_key: process.env.TMDB_API_KEY}
